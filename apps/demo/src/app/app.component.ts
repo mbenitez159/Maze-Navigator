@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoggingService } from './logging/logging.service';
 import { StuffService } from './stuff/stuff.service';
+import { MazeResponse } from './models/maze-response';
 
 @Component({
   selector: 'valant-root',
@@ -20,8 +21,8 @@ export class AppComponent implements OnInit {
 
   private getStuff(): void {
     this.stuffService.getStuff().subscribe({
-      next: (response: string[]) => {
-        this.data = response;
+      next: (response: MazeResponse) => {
+        this.data = response.mazes.map(maze=> maze.definition);
       },
       error: (error) => {
         this.logger.error('Error getting stuff: ', error);

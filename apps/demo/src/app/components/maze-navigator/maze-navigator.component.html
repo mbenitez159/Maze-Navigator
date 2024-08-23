@@ -1,0 +1,15 @@
+<div class="maze-container">
+  <h2>Navigate Maze</h2>
+  <div *ngFor="let row of currentMaze; let rowIndex = index" class="maze-row">
+    <span *ngFor="let cell of row; let colIndex = index" 
+          class="maze-cell"
+          [ngClass]="{'current-position': rowIndex === currentPosition.x && colIndex === currentPosition.y}">
+      {{ cell }}
+    </span>
+  </div>
+  <div class="controls">
+    <button *ngFor="let option of navigationOptions" (click)="onNavigate(option)">
+      Move {{ option }}
+    </button>
+  </div>
+</div>
