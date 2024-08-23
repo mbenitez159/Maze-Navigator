@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using ValantDemoApi.Core.Interfaces;
+using ValantDemoApi.Infrastructure.Data;
+using ValantDemoApi.Infrastructure.Services;
 
 namespace ValantDemoApi
 {
@@ -21,6 +25,11 @@ namespace ValantDemoApi
     {
       services.AddCors();
       services.AddControllers();
+      services.AddDbContext<MazeContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+      services.AddScoped<IMazeService, MazeService>();
+      services.AddScoped<IMazeValidatorService, MazeValidatorService>();
       services.AddSwaggerGen(c =>
       {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "ValantDemoApi", Version = "v1" });
@@ -28,21 +37,34 @@ namespace ValantDemoApi
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MazeContext context)
     {
       if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
         app.UseSwagger();
-        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ValantDemoApi v1"));
+        app.UseSwaggerUI(c =>
+        {
+          c.SwaggerEndpoint("/swagger/v1/swagger.json", "ValantDemoApi v1");
+        });
+        //app.UseSwagger();
+        //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ValantDemoApi v1"));
       }
+
+      // Ensure the database is created
+      context.Database.EnsureCreated();  // <-- Add this line
+
+      // Apply any pending migrations
+      context.Database.Migrate();  // <-- Or add this line to apply migrations
+
+      // Seed the database if needed
+      DbInitializer.Seed(context);
 
       app.UseRouting();
       app.UseCors(x => x
-                 .AllowAnyMethod()
-                 .AllowAnyHeader()
-                 .SetIsOriginAllowed(_ => true)
-                 .AllowCredentials());
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowAnyOrigin());
       app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>

@@ -8,14 +8,17 @@
 // ReSharper disable InconsistentNaming
 
 import { mergeMap as _observableMergeMap, catchError as _observableCatch } from 'rxjs/operators';
-import { Observable, throwError as _observableThrow, of as _observableOf } from 'rxjs';
+import { Observable, throwError as _observableThrow, of as _observableOf, of } from 'rxjs';
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
+import { MazeResponse } from '../models/maze-response';
 
 export module ValantDemoApiClient {
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+  })
 export class Client {
     private http: HttpClient;
     private baseUrl: string;
@@ -26,9 +29,72 @@ export class Client {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
+     /**
+     * Get a list of mazes with pagination
+     * @param pageNumber The page number to retrieve
+     * @param pageSize The number of items per page
+     * @return An observable of the maze response containing mazes and total pages
+     */
+     maze(pageNumber: number = 1, pageSize: number = 10): Observable<MazeResponse> {
+        let url_ = this.baseUrl + `/api/Maze?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(
+            _observableMergeMap((response_: any) => {
+                return this.processMaze(response_);
+            })
+        ).pipe(
+            _observableCatch((response_: any) => {
+                if (response_ instanceof HttpResponseBase) {
+                    try {
+                        return this.processMaze(<any>response_);
+                    } catch (e) {
+                        return <Observable<MazeResponse>><any>_observableThrow(e);
+                    }
+                } else
+                    return <Observable<MazeResponse>><any>_observableThrow(response_);
+            })
+        );
+    }
+
+    protected processMaze(response: HttpResponseBase): Observable<MazeResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; 
+        if (response.headers) { 
+            for (let key of response.headers.keys()) { 
+                _headers[key] = response.headers.get(key); 
+            }
+        }
+        
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+                let result200: any = null;
+                result200 = _responseText === "" ? null : <MazeResponse>JSON.parse(_responseText, this.jsonParseReviver);
+                return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return of<MazeResponse>({ mazes: [], totalPages: 0 });
+    }
     /**
      * @return Success
      */
+    /*
     maze(): Observable<string[]> {
         let url_ = this.baseUrl + "/Maze";
         url_ = url_.replace(/[?&]$/, "");
@@ -73,8 +139,9 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<string[]>(<any>null);
+        return of<string[]>([]);
     }
+    */
 }
 
 export class ApiException extends Error {

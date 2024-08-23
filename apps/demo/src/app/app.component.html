@@ -3,6 +3,14 @@
   <h1>Welcome to {{ title }}</h1>
 </header>
 <main>
-  <h2>Hi there</h2>
-  <p>Thanks for being you.</p>
+  <nav>
+    <a mat-button routerLink="/upload">Upload Maze</a>
+    <a mat-button routerLink="/select">Select Maze</a>
+    <a mat-button routerLink="/navigate">Navigate Maze</a>
+  </nav>
+  
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+  
 </main>

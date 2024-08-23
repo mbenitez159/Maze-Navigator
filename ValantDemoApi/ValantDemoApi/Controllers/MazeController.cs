@@ -1,24 +1,49 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
+using System.Linq;
+using ValantDemoApi.Core.Dto;
+using ValantDemoApi.Core.Entities;
+using ValantDemoApi.Core.Interfaces;
 
 namespace ValantDemoApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class MazeController : ControllerBase
     {
-        private readonly ILogger<MazeController> _logger;
+        private readonly IMazeService _mazeService;
+        private readonly IMazeValidatorService _validatorService;
 
-        public MazeController(ILogger<MazeController> logger)
+        public MazeController(IMazeService mazeService, IMazeValidatorService validatorService)
         {
-            _logger = logger;
+          _mazeService = mazeService;
+          _validatorService = validatorService;
+        }
+
+        [HttpPost("upload")]
+        public IActionResult UploadMaze([FromBody] MazeUploadDto mazeDto)
+        {
+            if (!_validatorService.ValidateMazeFormat(mazeDto.Definition))
+            {
+                return BadRequest("Invalid maze format.");
+            }
+
+            var maze = new Maze
+            {
+                Name = mazeDto.Name,
+                Definition = mazeDto.Definition
+            };
+
+            _mazeService.SaveMaze(maze);
+            return Ok();
         }
 
         [HttpGet]
-        public IEnumerable<string> GetNextAvailableMoves()
+        public IActionResult GetMazes(int pageNumber = 1, int pageSize = 10)
         {
-          return new List<string> {"Up", "Down", "Left", "Right"};
+            var (mazes, totalPages) = _mazeService.GetMazes(pageNumber, pageSize);
+            return Ok(new { mazes, totalPages });
         }
+
+
     }
 }
