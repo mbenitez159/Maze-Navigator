@@ -4,13 +4,15 @@ import { MazeUploaderComponent } from './components/maze-uploader/maze-uploader.
 import { MazeSelectorComponent } from './components/maze-selector/maze-selector.component';
 import { MazeNavigatorComponent } from './components/maze-navigator/maze-navigator.component';
 import { MazeCompletionComponent } from './components/maze-completion/maze-completion.component';
+import { MazeViewerComponent } from './components/maze-viewer/maze-viewer.component';
 
 @NgModule({
   declarations: [
     MazeUploaderComponent,
     MazeSelectorComponent,
     MazeNavigatorComponent,
-    MazeCompletionComponent
+    MazeCompletionComponent,
+    MazeViewerComponent
   ],
   imports: [
     CommonModule
@@ -19,7 +21,8 @@ import { MazeCompletionComponent } from './components/maze-completion/maze-compl
     MazeUploaderComponent,
     MazeSelectorComponent,
     MazeNavigatorComponent,
-    MazeCompletionComponent
+    MazeCompletionComponent,
+    MazeViewerComponent
   ]
 })
 export class MazeModule { }

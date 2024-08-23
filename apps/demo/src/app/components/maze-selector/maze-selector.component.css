@@ -1,0 +1,139 @@
+.maze-selector-container {
+  text-align: center;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #282c34;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+}
+
+.maze-selector-container h2 {
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+
+.maze-grid {
+  display: grid;
+  gap: 15px;
+  justify-content: center;
+}
+
+.maze-item {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #2a2a40, #161625);
+  box-shadow: 5px 5px 15px #0c0c15, -5px -5px 15px #323251;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.maze-item:hover {
+  transform: scale(1.05);
+  box-shadow: 10px 10px 20px #0c0c15, -10px -10px 20px #323251;
+}
+
+/* Default size for maze viewers */
+.maze-item app-maze-viewer {
+  width: 100%;
+  height: auto;
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+/* Media Queries */
+
+/* Large desktops: 4 mazes per line */
+@media (min-width: 1200px) {
+  .maze-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .maze-viewer {
+    max-width: 250px;
+  }
+}
+
+/* Small desktops: 3 mazes per line */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .maze-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .maze-viewer {
+    max-width: 200px;
+  }
+}
+
+/* Tablets and mobile devices: 1 maze per line */
+@media (max-width: 767px) {
+  .maze-grid {
+    grid-template-columns: 1fr;
+  }
+  .maze-viewer {
+    max-width: 100%;
+  }
+}
+
+.maze-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #282c34;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.maze-row {
+  display: flex;
+}
+
+.maze-cell {
+  width: 30px;
+  height: 30px;
+  margin: 2px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.wall {
+  background-color: #333;
+  box-shadow: inset 0 0 10px #000;
+}
+
+.open {
+  background-color: #fafafa;
+  box-shadow: inset 0 0 5px #ddd;
+}
+
+.start {
+  background-color: #4caf50;
+  box-shadow: 0 0 15px #4caf50, inset 0 0 10px #000;
+}
+
+.end {
+  background-color: #f44336;
+  box-shadow: 0 0 15px #f44336, inset 0 0 10px #000;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  }
+}
+
+.maze-cell.start,
+.maze-cell.end {
+  animation: pulse 2s infinite;
+}
