@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MazeService } from '../../services/maze.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-maze-uploader',
@@ -8,7 +9,9 @@ import { MazeService } from '../../services/maze.service';
 })
 export class MazeUploaderComponent implements OnInit {
 
-  constructor(private mazeService: MazeService) {}
+  constructor(private mazeService: MazeService,
+     private router: Router,
+     private route: ActivatedRoute) {}
 
   ngOnInit() {
   }
@@ -17,7 +20,11 @@ export class MazeUploaderComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       this.mazeService.uploadMaze(file).subscribe(
-        () => alert('Maze uploaded successfully'),
+        () => {
+          alert('Maze uploaded successfully');
+          this.router.navigate(['../select'], { relativeTo: this.route });
+
+        },
         (error) => alert('Failed to upload maze: ' + error.message)
       );
     }

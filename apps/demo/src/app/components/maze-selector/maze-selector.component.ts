@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MazeService } from '../../services/maze.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-maze-selector',
@@ -10,7 +11,9 @@ export class MazeSelectorComponent implements OnInit {
 
   mazes: string[] = [];
 
-  constructor(private mazeService: MazeService) {}
+  constructor(private mazeService: MazeService,
+    private router: Router,
+    private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.mazes = this.mazeService.getAvailableMazes();
@@ -18,6 +21,7 @@ export class MazeSelectorComponent implements OnInit {
 
   onSelectMaze(maze: string): void {
     this.mazeService.selectMaze(maze);
+    this.router.navigate(['../navigate'], { relativeTo: this.route });
   }
 
 }
