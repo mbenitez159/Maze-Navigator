@@ -1,0 +1,8 @@
+<div class="maze-container">
+  <div *ngFor="let row of maze" class="maze-row">
+    <div *ngFor="let cell of row" 
+         class="maze-cell" 
+         [ngClass]="{'wall': cell === 'X', 'open': cell === 'O', 'start': cell === 'S', 'end': cell === 'E'}">
+    </div>
+  </div>
+</div>
