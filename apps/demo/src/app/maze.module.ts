@@ -5,6 +5,7 @@ import { MazeSelectorComponent } from './components/maze-selector/maze-selector.
 import { MazeNavigatorComponent } from './components/maze-navigator/maze-navigator.component';
 import { MazeCompletionComponent } from './components/maze-completion/maze-completion.component';
 import { MazeViewerComponent } from './components/maze-viewer/maze-viewer.component';
+import { MazeTransformPipe } from './pipes/maze-transform.pipe';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { MazeViewerComponent } from './components/maze-viewer/maze-viewer.compon
     MazeSelectorComponent,
     MazeNavigatorComponent,
     MazeCompletionComponent,
-    MazeViewerComponent
+    MazeViewerComponent,
+    MazeTransformPipe
   ],
   imports: [
     CommonModule

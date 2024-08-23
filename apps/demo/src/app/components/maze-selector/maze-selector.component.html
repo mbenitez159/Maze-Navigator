@@ -2,7 +2,7 @@
   <h2>Select Your Maze</h2>
   <div class="maze-grid">
     <div *ngFor="let maze of mazes" class="maze-item" (click)="onSelectMaze(maze)">
-      <app-maze-viewer [mazeValue]="maze"></app-maze-viewer>
+      <app-maze-viewer [maze]="maze | mazeTransform"></app-maze-viewer>
     </div>
   </div>
 </div>

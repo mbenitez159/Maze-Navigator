@@ -7,13 +7,10 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MazeViewerComponent implements OnInit {
 
-  @Input() mazeValue: string = '';
-  maze: string[][] = [];
+  @Input()maze: string[][] = [];
 
   ngOnInit(): void {
-    if (this.mazeValue) {
-      this.maze = this.mazeValue.trim().split('\n').map(row => row.split(''));
-    }
+
   }
 
 }

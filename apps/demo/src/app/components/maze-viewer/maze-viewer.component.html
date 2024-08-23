@@ -2,7 +2,13 @@
   <div *ngFor="let row of maze" class="maze-row">
     <div *ngFor="let cell of row" 
          class="maze-cell" 
-         [ngClass]="{'wall': cell === 'X', 'open': cell === 'O', 'start': cell === 'S', 'end': cell === 'E'}">
+         [ngClass]="{
+           'wall': cell === 'X', 
+           'open': cell === 'O', 
+           'start': cell === 'S', 
+           'end': cell === 'E',
+           'position': cell === 'P'
+         }">
     </div>
   </div>
 </div>

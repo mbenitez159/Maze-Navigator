@@ -24,7 +24,17 @@ export class MazeNavigatorComponent implements OnInit {
   onNavigate(direction: string): void {
     this.navigatorService.move(direction);
     this.currentPosition = this.navigatorService.getCurrentPosition();
+    this.updateMazeWithPosition();
     this.navigationOptions = this.navigatorService.getNavigationOptions();
+  }
+  private updateMazeWithPosition(): void {
+    // Reset previous position
+    this.currentMaze = this.currentMaze.map(row => 
+      row.map(cell => cell === 'P' ? 'O' : cell)
+    );
+
+    // Mark current position
+    this.currentMaze[this.currentPosition.x][this.currentPosition.y] = 'P';
   }
 
 }
