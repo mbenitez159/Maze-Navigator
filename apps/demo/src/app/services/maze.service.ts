@@ -58,6 +58,7 @@ export class MazeService {
   }
 
   getAvailableMazes(): Observable<string[]> {
+    this.updateMaze();
     return this.mazesSubject.asObservable();
   }
 
