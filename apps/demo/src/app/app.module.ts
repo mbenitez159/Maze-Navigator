@@ -3,9 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { LoggingService } from './logging/logging.service';
-import { StuffService } from './stuff/stuff.service';
 import { environment } from '../environments/environment';
-import { ValantDemoApiClient } from './api-client/api-client';
+import { API_BASE_URL, ApiClient } from './api-client/api-client';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -34,9 +33,8 @@ export function getBaseUrl(): string {
   ],
   providers: [
     LoggingService,
-    StuffService,
-    ValantDemoApiClient.Client,
-    { provide: ValantDemoApiClient.API_BASE_URL, useFactory: getBaseUrl },
+    ApiClient,
+    { provide: API_BASE_URL, useFactory: getBaseUrl },
     provideAnimationsAsync(),
   ],
   bootstrap: [AppComponent],

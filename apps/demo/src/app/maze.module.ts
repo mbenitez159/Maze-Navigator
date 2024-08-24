@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MazeUploaderComponent } from './components/maze-uploader/maze-uploader.component';
 import { MazeSelectorComponent } from './components/maze-selector/maze-selector.component';
 import { MazeNavigatorComponent } from './components/maze-navigator/maze-navigator.component';
-import { MazeCompletionComponent } from './components/maze-completion/maze-completion.component';
 import { MazeViewerComponent } from './components/maze-viewer/maze-viewer.component';
 import { MazeTransformPipe } from './pipes/maze-transform.pipe';
 
@@ -12,7 +11,6 @@ import { MazeTransformPipe } from './pipes/maze-transform.pipe';
     MazeUploaderComponent,
     MazeSelectorComponent,
     MazeNavigatorComponent,
-    MazeCompletionComponent,
     MazeViewerComponent,
     MazeTransformPipe
   ],
@@ -23,7 +21,6 @@ import { MazeTransformPipe } from './pipes/maze-transform.pipe';
     MazeUploaderComponent,
     MazeSelectorComponent,
     MazeNavigatorComponent,
-    MazeCompletionComponent,
     MazeViewerComponent
   ]
 })

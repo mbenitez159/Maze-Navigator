@@ -1,6 +1,6 @@
 import { Maze } from "./maze";
 
 export interface MazeResponse {
-    mazes: Maze[];
+    items: Maze[];
     totalPages: number;
   }

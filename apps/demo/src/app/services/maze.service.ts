@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, of } from 'rxjs';
-import { StuffService } from '../stuff/stuff.service';
 import { LoggingService } from '../logging/logging.service';
 import { MazeResponse } from '../models/maze-response';
-import { ValantDemoApiClient } from '../api-client/api-client';
+import { ApiClient } from '../api-client/api-client';
 
 
 @Injectable({
@@ -13,7 +12,7 @@ export class MazeService {
 
 
 
-  constructor(private client: ValantDemoApiClient.Client,private logger: LoggingService) {
+  constructor(private client: ApiClient,private logger: LoggingService) {
     this.updateMaze();
   }
   private mazes: string[] = [];
@@ -73,7 +72,7 @@ export class MazeService {
   private updateMaze(): void {
     this.client.maze().subscribe({
       next: (response: MazeResponse) => {
-        const mazes = response.mazes.map(maze => maze.definition);
+        const mazes = response.items.map(maze => maze.definition);
         this.mazesSubject.next(mazes);
       },
       error: (error) => {
