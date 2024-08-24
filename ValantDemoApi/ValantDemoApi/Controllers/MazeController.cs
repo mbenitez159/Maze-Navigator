@@ -8,21 +8,13 @@ namespace ValantDemoApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MazeController : ControllerBase
+    public class MazeController(IMazeService mazeService, IMazeValidatorService validatorService)
+      : ControllerBase
     {
-        private readonly IMazeService _mazeService;
-        private readonly IMazeValidatorService _validatorService;
-
-        public MazeController(IMazeService mazeService, IMazeValidatorService validatorService)
-        {
-          _mazeService = mazeService;
-          _validatorService = validatorService;
-        }
-
-        [HttpPost("upload")]
+      [HttpPost("upload")]
         public IActionResult UploadMaze([FromBody] MazeUploadDto mazeDto)
         {
-            if (!_validatorService.ValidateMazeFormat(mazeDto.Definition))
+            if (!validatorService.ValidateMazeFormat(mazeDto.Definition))
             {
                 return BadRequest("Invalid maze format.");
             }
@@ -33,14 +25,14 @@ namespace ValantDemoApi.Controllers
                 Definition = mazeDto.Definition
             };
 
-            _mazeService.SaveMaze(maze);
+            mazeService.SaveMaze(maze);
             return Ok();
         }
 
         [HttpGet]
         public IActionResult GetMazes(int pageNumber = 1, int pageSize = 10)
         {
-            var page = _mazeService.GetMazes(pageNumber, pageSize);
+            var page = mazeService.GetMazes(pageNumber, pageSize);
             return Ok(new PaginationDto<Maze>(page.Items, page.TotalPages));
         }
     }
