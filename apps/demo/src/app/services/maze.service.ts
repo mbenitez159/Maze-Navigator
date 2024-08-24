@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, catchError, of } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of } from 'rxjs';
 import { StuffService } from '../stuff/stuff.service';
 import { LoggingService } from '../logging/logging.service';
 import { MazeResponse } from '../models/maze-response';
@@ -14,19 +14,11 @@ export class MazeService {
 
 
   constructor(private client: ValantDemoApiClient.Client,private logger: LoggingService) {
-    client.maze().subscribe({
-      next: (response: MazeResponse) => {
-        this.mazes = response.mazes.map(maze=> maze.definition);
-      },
-      error: (error) => {
-        this.logger.error('Error getting stuff: ', error);
-      },
-    });
-
-    
+    this.updateMaze();
   }
   private mazes: string[] = [];
   private selectedMaze: string | null = null;
+  private mazesSubject: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
   uploadMaze(file: File): Observable<void> {
     return new Observable<void>((observer) => {
@@ -65,8 +57,8 @@ export class MazeService {
     });
   }
 
-  getAvailableMazes(): string[] {
-    return this.mazes;
+  getAvailableMazes(): Observable<string[]> {
+    return this.mazesSubject.asObservable();
   }
 
   selectMaze(maze: string): void {
@@ -75,6 +67,18 @@ export class MazeService {
 
   getSelectedMaze(): string | null {
     return this.selectedMaze;
+  }
+
+  private updateMaze(): void {
+    this.client.maze().subscribe({
+      next: (response: MazeResponse) => {
+        const mazes = response.mazes.map(maze => maze.definition);
+        this.mazesSubject.next(mazes);
+      },
+      error: (error) => {
+        this.logger.error('Error getting mazes: ', error);
+      }
+    });
   }
 
   private formatMaze(content: string): string {

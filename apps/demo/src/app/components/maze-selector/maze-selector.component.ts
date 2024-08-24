@@ -16,7 +16,9 @@ export class MazeSelectorComponent implements OnInit {
     private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.mazes = this.mazeService.getAvailableMazes();
+    this.mazeService.getAvailableMazes().subscribe((mazes) => {
+      this.mazes = mazes;
+    });
   }
 
   onSelectMaze(maze: string): void {
