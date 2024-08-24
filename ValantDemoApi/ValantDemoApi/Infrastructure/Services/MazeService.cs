@@ -4,35 +4,20 @@ using System.Linq;
 using ValantDemoApi.Core.Entities;
 using ValantDemoApi.Core.Interfaces;
 using ValantDemoApi.Infrastructure.Data;
+using ValantDemoApi.Infrastructure.Repositories.Interfaces;
 
 namespace ValantDemoApi.Infrastructure.Services;
 
-public class MazeService : IMazeService
+public class MazeService(IMazeRepository mazeRepository) : IMazeService
 {
-  private readonly MazeContext _context;
-
-  public MazeService(MazeContext context)
-  {
-    _context = context;
-  }
-
   public void SaveMaze(Maze maze)
   {
-    _context.Mazes.Add(maze);
-    _context.SaveChanges();
+    mazeRepository.Add(maze);
   }
 
-  public (IEnumerable<Maze>, int totalPages) GetMazes(int pageNumber, int pageSize)
+  public Pagination<Maze> GetMazes(int pageNumber, int pageSize)
   {
-    var totalMazes = _context.Mazes.Count();
-    var totalPages = (int)Math.Ceiling((double)totalMazes / pageSize);
-
-    var mazes = _context.Mazes
-      .OrderBy(m => m.Id)
-      .Skip((pageNumber - 1) * pageSize)
-      .Take(pageSize)
-      .ToList();
-
-    return (mazes, totalPages);
+    return mazeRepository.GetPaged(pageNumber, pageSize);
   }
 }
+

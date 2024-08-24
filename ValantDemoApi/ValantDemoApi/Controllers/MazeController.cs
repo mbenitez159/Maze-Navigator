@@ -40,10 +40,8 @@ namespace ValantDemoApi.Controllers
         [HttpGet]
         public IActionResult GetMazes(int pageNumber = 1, int pageSize = 10)
         {
-            var (mazes, totalPages) = _mazeService.GetMazes(pageNumber, pageSize);
-            return Ok(new { mazes, totalPages });
+            var page = _mazeService.GetMazes(pageNumber, pageSize);
+            return Ok(new PaginationDto<Maze>(page.Items, page.TotalPages));
         }
-
-
     }
 }

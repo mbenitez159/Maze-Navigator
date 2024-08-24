@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using ValantDemoApi.Core.Interfaces;
 using ValantDemoApi.Infrastructure.Data;
+using ValantDemoApi.Infrastructure.Repositories;
+using ValantDemoApi.Infrastructure.Repositories.Interfaces;
 using ValantDemoApi.Infrastructure.Services;
 
 namespace ValantDemoApi
@@ -27,7 +29,7 @@ namespace ValantDemoApi
       services.AddControllers();
       services.AddDbContext<MazeContext>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+      services.AddScoped<IMazeRepository, MazeRepository>();
       services.AddScoped<IMazeService, MazeService>();
       services.AddScoped<IMazeValidatorService, MazeValidatorService>();
       services.AddSwaggerGen(c =>
@@ -47,8 +49,6 @@ namespace ValantDemoApi
         {
           c.SwaggerEndpoint("/swagger/v1/swagger.json", "ValantDemoApi v1");
         });
-        //app.UseSwagger();
-        //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ValantDemoApi v1"));
       }
 
       // Ensure the database is created
