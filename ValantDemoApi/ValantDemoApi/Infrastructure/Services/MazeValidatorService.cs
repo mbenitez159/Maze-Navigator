@@ -1,55 +1,44 @@
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using ValantDemoApi.Core.Interfaces;
 
 namespace ValantDemoApi.Infrastructure.Services;
 
 public class MazeValidatorService: IMazeValidatorService
 {
+  private static readonly Regex ValidRowPattern =
+    new(@"^[SOEX][OX]+[SOEX]$", RegexOptions.Compiled);
+
   public bool ValidateMazeFormat(string mazeFormat)
   {
-    var maze = mazeFormat.Split("\n");
-    if (maze == null || maze.Length == 0)
-    {
-      return false;
-    }
+    var maze = mazeFormat.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
-    int startCount = 0;
-    int exitCount = 0;
-    int rowLength = maze[0].Length;
+    if (!IsValidMazeStructure(maze))
+      return false;
+
+    var expectedLength = maze[0].Length;
+    var startCount = 0;
+    var exitCount = 0;
 
     foreach (var row in maze)
     {
-      // Check for consistent row length
-      if (row.Length != rowLength)
-      {
+      if (!IsValidRow(row, expectedLength))
         return false;
-      }
 
-      foreach (var cell in row)
-      {
-        // Check for allowed characters
-        if (cell != 'S' && cell != 'O' && cell != 'X' && cell != 'E')
-        {
-          return false;
-        }
-
-        // Count start and exit points
-        if (cell == 'S')
-        {
-          startCount++;
-        }
-        else if (cell == 'E')
-        {
-          exitCount++;
-        }
-      }
+      startCount += row.Count(c => c == 'S');
+      exitCount += row.Count(c => c == 'E');
     }
 
-    // Ensure exactly one start and one exit point
-    if (startCount != 1 || exitCount != 1)
-    {
-      return false;
-    }
-
-    return true;
+    return HasExactlyOneStartAndExit(startCount, exitCount);
   }
+
+  private static bool IsValidMazeStructure(string[] maze) =>
+    maze is { Length: >= 2 };
+
+  private static bool IsValidRow(string row, int expectedLength) =>
+    row.Length == expectedLength && ValidRowPattern.IsMatch(row);
+
+  private static bool HasExactlyOneStartAndExit(int startCount, int exitCount) =>
+    startCount == 1 && exitCount == 1;
 }
