@@ -18,7 +18,17 @@
   height: 30px;
   margin: 2px;
   border-radius: 5px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.on-navigation {
+  transform: scale(2);
+}
+
+
+.maze-cell.current-position {
+  background-color: #ffeb3b;
+  box-shadow: 0 0 15px #ffeb3b, inset 0 0 10px #000;
+  transform: scale(1.1);
 }
 
 .wall {

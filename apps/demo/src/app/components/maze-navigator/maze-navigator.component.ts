@@ -10,7 +10,8 @@ export class MazeNavigatorComponent implements OnInit {
 
   currentMaze: string[][] = [];
   currentPosition: { x: number, y: number } = { x: 0, y: 0 };
-  navigationOptions: string[] = [];
+  navigationOptions: string[] = ['North', 'South', 'West', 'East'];
+
 
   constructor(private navigatorService: NavigatorService) {}
 
@@ -18,14 +19,12 @@ export class MazeNavigatorComponent implements OnInit {
     this.navigatorService.loadMaze();
     this.currentMaze = this.navigatorService.getCurrentMaze();
     this.currentPosition = this.navigatorService.getCurrentPosition();
-    this.navigationOptions = this.navigatorService.getNavigationOptions();
   }
 
   onNavigate(direction: string): void {
     this.navigatorService.move(direction);
     this.currentPosition = this.navigatorService.getCurrentPosition();
     this.updateMazeWithPosition();
-    this.navigationOptions = this.navigatorService.getNavigationOptions();
   }
   private updateMazeWithPosition(): void {
     // Reset previous position
@@ -35,6 +34,22 @@ export class MazeNavigatorComponent implements OnInit {
 
     // Mark current position
     this.currentMaze[this.currentPosition.x][this.currentPosition.y] = 'P';
+  }
+
+  isMazeCompleted(): boolean
+  {
+    return this.navigatorService.mazeCompleted;
+  }
+
+  isMovePossible(direction: string): boolean {
+    const newPosition = this.navigatorService.getPotentialPosition(direction);
+    return this.navigatorService.isMovePossible(newPosition.x, newPosition.y);
+  }
+
+
+  ngOnDestroy(): void {
+    // Reset the service state when the component is destroyed
+    this.navigatorService.reset();
   }
 
 }

@@ -1,4 +1,4 @@
-<div class="maze-container">
+<div class="maze-container" [ngClass]="{'on-navigation': navigationMode}">
   <div *ngFor="let row of maze" class="maze-row">
     <div *ngFor="let cell of row" 
          class="maze-cell" 

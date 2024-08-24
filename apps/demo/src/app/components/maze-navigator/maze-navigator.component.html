@@ -1,9 +1,19 @@
-<div class="maze-container">
-  <h2>Navigate Maze</h2>
-  <app-maze-viewer [maze]="currentMaze"></app-maze-viewer>
+<div class="maze-navigator-container">
+  <h2>Navigate the Maze</h2>
+  <div class="maze-viewer-wrapper">
+    <app-maze-viewer [maze]="currentMaze" [currentPosition]="currentPosition" [navigationMode]="true"></app-maze-viewer>
+  </div>
   <div class="controls">
-    <button *ngFor="let option of navigationOptions" (click)="onNavigate(option)">
+    <button 
+      *ngFor="let option of navigationOptions" 
+      (click)="onNavigate(option)" 
+      [disabled]="!isMovePossible(option)"
+      [ngClass]="{'disabled': !isMovePossible(option)}">
       Move {{ option }}
     </button>
+  </div>
+  <div *ngIf="isMazeCompleted()" class="congratulations">
+    <h2>Congratulations! 🎉</h2>
+    <p>You have successfully completed the maze!</p>
   </div>
 </div>

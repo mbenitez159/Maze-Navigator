@@ -6,6 +6,7 @@ import { MazeService } from './maze.service';
 })
 export class NavigatorService {
 
+  public mazeCompleted = false;
   private maze: string[][] = [];
   private position: { x: number, y: number } = { x: 0, y: 0 };
 
@@ -37,24 +38,38 @@ export class NavigatorService {
   }
 
   move(direction: string): void {
+    const newPosition = this.getPotentialPosition(direction);
+    if (this.isMovePossible(newPosition.x, newPosition.y)) {
+      this.position = newPosition;
+      if (this.maze[this.position.x][this.position.y] === 'E') {
+        this.mazeCompleted = true;
+      }
+    }
+  }
+
+  getPotentialPosition(direction: string): { x: number, y: number } {
+    let newPosition = { ...this.position };
     switch (direction) {
       case 'North':
-        this.position.x--;
+        newPosition.x--;
         break;
       case 'South':
-        this.position.x++;
+        newPosition.x++;
         break;
       case 'West':
-        this.position.y--;
+        newPosition.y--;
         break;
       case 'East':
-        this.position.y++;
+        newPosition.y++;
         break;
     }
-
-    if (this.maze[this.position.x][this.position.y] === 'E') {
-      alert('You have completed the maze!');
-    }
+    return newPosition;
+  }
+  
+  reset(): void {
+    this.maze = [];
+    this.position = { x: 0, y: 0 };
+    this.mazeCompleted = false;
   }
 
   private parseMaze(mazeStr: string): string[][] {
@@ -72,7 +87,7 @@ export class NavigatorService {
     return { x: 0, y: 0 };
   }
 
-  private isMovePossible(x: number, y: number): boolean {
+  isMovePossible(x: number, y: number): boolean {
     return x >= 0 && y >= 0 && x < this.maze.length && y < this.maze[0].length && this.maze[x][y] !== 'X';
   }
 

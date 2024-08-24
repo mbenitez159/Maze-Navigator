@@ -7,7 +7,9 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MazeViewerComponent implements OnInit {
 
-  @Input()maze: string[][] = [];
+  @Input() maze: string[][] = [];
+  @Input() currentPosition: { x: number, y: number } | null = null;
+  @Input() navigationMode: boolean = false;
 
   ngOnInit(): void {
 
