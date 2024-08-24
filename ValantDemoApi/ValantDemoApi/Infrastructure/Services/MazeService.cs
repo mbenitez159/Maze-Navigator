@@ -12,7 +12,8 @@ public class MazeService(IMazeRepository mazeRepository) : IMazeService
 {
   public void SaveMaze(Maze maze)
   {
-    mazeRepository.Add(maze);
+    if (maze is not null)
+      mazeRepository.Add(maze);
   }
 
   public Pagination<Maze> GetMazes(int pageNumber, int pageSize)

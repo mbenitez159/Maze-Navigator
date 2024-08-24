@@ -47,10 +47,6 @@ public static class DbInitializer
         UploadedAt = DateTime.UtcNow
       }
     };
-
-
-
-
     context.Mazes.AddRange(mazes);
     context.SaveChanges();
   }
