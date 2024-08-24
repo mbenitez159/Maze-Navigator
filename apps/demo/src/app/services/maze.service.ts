@@ -10,8 +10,6 @@ import { ApiClient } from '../api-client/api-client';
 })
 export class MazeService {
 
-
-
   constructor(private client: ApiClient,private logger: LoggingService) {
     this.updateMaze();
   }

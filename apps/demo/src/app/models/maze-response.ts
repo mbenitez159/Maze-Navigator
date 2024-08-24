@@ -4,3 +4,5 @@ export interface MazeResponse {
     items: Maze[];
     totalPages: number;
   }
+
+export { Maze };
