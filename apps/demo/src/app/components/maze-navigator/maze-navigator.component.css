@@ -4,8 +4,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px;
-  height: 100vh; /* Full screen height */
+  height: 90vh;
+  width: 80vw; /* Ensure it takes the full viewport width */
   background: linear-gradient(135deg, #282c34, #3a3f47);
+  box-sizing: border-box; /* Include padding in the width */
+  color: #e0e0e0; /* Light gray text for contrast */
 }
 
 /* Wrapper for the maze viewer to allow it to expand */

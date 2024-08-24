@@ -1,9 +1,10 @@
-<header class="flex">
-  <img alt="Valant logo" width="150" src="../assets/valant_logo.png" />
+<header class="app-header">
+  <img alt="Valant logo" class="logo" src="assets/valant_logo.png" />
   <h1>Welcome to {{ title }}</h1>
 </header>
-<main>
-  <nav>
+
+<main class="app-main">
+  <nav class="app-nav">
     <a mat-button routerLink="/upload">Upload Maze</a>
     <a mat-button routerLink="/select">Select Maze</a>
     <a mat-button routerLink="/navigate">Navigate Maze</a>
@@ -12,5 +13,4 @@
   <div class="content">
     <router-outlet></router-outlet>
   </div>
-  
 </main>
