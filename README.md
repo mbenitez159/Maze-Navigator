@@ -19,7 +19,7 @@ The Maze Navigator application is built using a modern web stack with Angular 18
   *   **API Controllers**: Provides endpoints to handle maze uploads, loading, and navigation logic.
   *   **Services**: Encapsulates the business logic, such as maze parsing and movement validation.
   *   **Data Models**: Defines the structure of the maze and other related entities.
-3.  **Database**: The application does not use a traditional database but instead operates on in-memory storage for simplicity.
+3.  **Database**: The application uses SQL Server 2019, deployed through Docker. The database is automatically populated by default using a seed method in the backend, ensuring that the required data is available upon initialization..
 
 4.  **Testing**:
 
