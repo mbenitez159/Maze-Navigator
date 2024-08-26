@@ -1,0 +1,30 @@
+﻿services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourPassword123!
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P YourPassword123! -Q 'SELECT 1'"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - sqlserver
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=MazeDb;User Id=SA;Password=YourPassword123!;TrustServerCertificate=True;
+    ports:
+      - "7200:8080"
+
+volumes:
+  sqlvolume:
